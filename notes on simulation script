@@ -1,0 +1,35 @@
+默认不信任任何节点（不管是中继还是边界内部），假设威胁无处不在；
+
+实时动态路由与 MTD（不断改变通信路径和参数，增加攻击难度）；
+
+概率化和惩罚机制管理信任（持续调整节点的信任度，而不是静态设定）；
+
+集中化控制 + 全局监测（类似 Zero Trust 架构中的控制平面）。
+
+Possible: use machine learning to categorize nodes
+
+module 1 (Transmission)
+    submodule 1 (Path Selection)
+        1. Use Yen's algorithm to find a set of shortest paths S(C_p)
+        2. Calculate correlation Cor for every pair of paths, P_i and P_j, in S(C_p). Compare Cor with a threshold value Cor_max,
+        if Cor < Cor_max, proceed.
+            a. Cor_max = lambda_cor * Cor_avg_in_C_p
+        3. Calculate delta_secure of adding P_i and P_j, if delta_secure > 0, add P_i and P_j to S(P).
+            a. question: how to measure secure?
+                possible answer 2: multi-dimensional evaluatation (geo-location of node, history secure weight(error in qubit)
+                                    current network conditions, historical data, and potential security threats)
+        4. return S(P)
+
+    submodule 1 (Routing)
+        1. Find n number of path, according to the real-time safety evaluation of each node, path from S(P).
+
+    submodule 2 (Excution)
+        1. Generate and send Qubit string through n number of path.
+
+module 2 (Eavesdropping)
+    1. Eve can move in space
+    2. Variable: 
+        a. pervasiveness: Percentage of nodes occupied by Eve.
+        b. capability: Eve's probability of captureing parent string on a single node
+    3. Determination of success eavesdropping:
+        a. Case 1. At least 1 safe 
